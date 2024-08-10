@@ -6,4 +6,9 @@
         <Nullable>disable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Brokers\" />
+      <Folder Include="Services\Foundations\" />
+    </ItemGroup>
+
 </Project>
