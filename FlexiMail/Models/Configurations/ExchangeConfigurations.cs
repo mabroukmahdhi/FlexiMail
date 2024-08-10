@@ -10,7 +10,10 @@ namespace FlexiMail.Models.Configurations
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string TenantId { get; set; }
-        public string EmailAddress { get; set; }
+        public string SmtpAddress { get; set; }
+        public string Sid { get; set; }
+        public string PrincipalName { get; set; }
         public string Authority { get; set; }
+        public string[] Scopes { get; set; }
     }
 }

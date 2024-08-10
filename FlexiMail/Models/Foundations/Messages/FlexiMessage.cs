@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using FlexiMail.Models.Foundations.Attachments;
+using FlexiMail.Models.Foundations.Bodies;
 
 namespace FlexiMail.Models.Foundations.Messages
 {
@@ -14,7 +15,7 @@ namespace FlexiMail.Models.Foundations.Messages
         public List<string> Cc { get; set; }
         public List<string> Bcc { get; set; }
         public string Subject { get; set; }
-        public string Body { get; set; }
+        public FlexiBody Body { get; set; }
         public List<FlexiAttachment> Attachments { get; set; }
     }
 }
