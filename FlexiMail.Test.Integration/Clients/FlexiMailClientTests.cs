@@ -16,7 +16,7 @@ namespace FlexiMail.Test.Integration.Clients
 
         public FlexiMailClientTests()
         {
-            var tenantId = Environment.GetEnvironmentVariable("TenantId",EnvironmentVariableTarget.Machine);
+            var tenantId = Environment.GetEnvironmentVariable("TenantId");
             var authority = $"https://login.microsoftonline.com/{tenantId}";
 
             var configurations = new ExchangeConfigurations
