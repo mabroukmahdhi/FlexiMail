@@ -30,3 +30,4 @@ jobs:
       Sid: ${{ secrets.SID }}
       SmtpAddress: ${{ secrets.SMTPADDRESS }}
       TenantId: ${{ secrets.TENANTID }}
+      FlexiTestEmail: ${{ secrets.FLEXITESTEMAIL }}

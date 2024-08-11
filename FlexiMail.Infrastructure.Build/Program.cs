@@ -51,7 +51,8 @@ namespace FlexiMail.Infrastructure.Build
                                 { "PrincipalName", "${{ secrets.PRINCIPALNAME }}" },
                                 { "Sid", "${{ secrets.SID }}" },
                                 { "SmtpAddress", "${{ secrets.SMTPADDRESS }}" },
-                                { "TenantId", "${{ secrets.TENANTID }}" }
+                                { "TenantId", "${{ secrets.TENANTID }}" },
+                                { "FlexiTestEmail", "${{ secrets.FLEXITESTEMAIL }}" },
                             },
 
                             RunsOn = BuildMachines.WindowsLatest,
