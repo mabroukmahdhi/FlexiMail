@@ -14,9 +14,9 @@ namespace FlexiMail.Services
         {
             ValidFlexiMessageIsNotNull(flexiMessage);
 
-            Validate((Rule: IsInvalid(flexiMessage.To), Parameter: nameof(FlexiMessage.To)),
-                (Rule: IsInvalid(flexiMessage.Cc), Parameter: nameof(FlexiMessage.Cc)),
-                (Rule: IsInvalid(flexiMessage.Bcc), Parameter: nameof(FlexiMessage.Bcc)));
+            Validate((Rule: IsInvalid(flexiMessage.To), Parameter: nameof(FlexiMessage.To)));
+            Validate((Rule: IsInvalid(flexiMessage.Cc), Parameter: nameof(FlexiMessage.Cc)));
+            Validate((Rule: IsInvalid(flexiMessage.Bcc), Parameter: nameof(FlexiMessage.Bcc)));
         }
 
         private static void ValidFlexiMessageIsNotNull(FlexiMessage flexiMessage)

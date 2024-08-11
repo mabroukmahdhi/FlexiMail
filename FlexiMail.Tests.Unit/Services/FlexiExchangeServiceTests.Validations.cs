@@ -74,15 +74,7 @@ namespace FlexiMail.Tests.Unit.Services
 
             invalidFlexiMessageException.AddData(
                 key: nameof(FlexiMessage.To),
-                values: "Value is not set");
-
-            invalidFlexiMessageException.AddData(
-                key: nameof(FlexiMessage.Cc),
-                values: "Value is not set");
-
-            invalidFlexiMessageException.AddData(
-                key: nameof(FlexiMessage.Bcc),
-                values: "Value is not set");
+                values: "Value is not set"); 
 
             var expectedFlexiMessageValidationException =
                 new FlexiMessageValidationException(
