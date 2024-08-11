@@ -13,6 +13,8 @@ namespace FlexiMail.Services
         private static void ValidFlexiMessage(FlexiMessage flexiMessage)
         {
             ValidFlexiMessageIsNotNull(flexiMessage);
+            
+            
         }
 
         private static void ValidFlexiMessageIsNotNull(FlexiMessage flexiMessage)
