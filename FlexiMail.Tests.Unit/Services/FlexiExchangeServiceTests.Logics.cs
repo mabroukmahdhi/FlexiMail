@@ -11,12 +11,12 @@ namespace FlexiMail.Tests.Unit.Services
     public partial class FlexiExchangeServiceTests
     {
         [Fact]
-        public void ShouldSendAndSaveCopyAsync()
+        public async void ShouldSendAndSaveCopyAsync()
         {
             // given
             var randomAccessToken = GetRandomString();
             var randomMessage = CreateRandomFlexiMessage();
-            var randomExchangeService = CreateExchangeService(); 
+            var randomExchangeService = CreateExchangeService();
 
             this.exchangeBrokerMock.Setup(broker =>
                     broker.GetAccessTokenAsync())
@@ -27,10 +27,10 @@ namespace FlexiMail.Tests.Unit.Services
                         ExchangeVersion.Exchange2013,
                         randomAccessToken,
                         It.IsAny<ImpersonatedUserId>()))
-                .Returns(randomExchangeService); 
+                .Returns(randomExchangeService);
 
             // when
-            this.flexiExchangeService.SendAndSaveCopyAsync(randomMessage);
+            await this.flexiExchangeService.SendAndSaveCopyAsync(randomMessage);
 
             // then
             this.exchangeBrokerMock.Verify(broker =>

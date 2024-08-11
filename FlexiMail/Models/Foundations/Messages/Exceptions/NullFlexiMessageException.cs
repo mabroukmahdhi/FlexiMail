@@ -3,11 +3,11 @@
 // Made with love for the .NET Community
 // ---------------------------------------
 
-using System;
+using Xeptions;
 
 namespace FlexiMail.Models.Foundations.Messages.Exceptions
 {
-    public class NullFlexiMessageException(string message) : Exception(message)
+    public class NullFlexiMessageException(string message) : Xeption(message)
     {
     }
 }

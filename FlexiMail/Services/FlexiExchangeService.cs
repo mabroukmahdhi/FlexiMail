@@ -15,50 +15,53 @@ using Microsoft.Exchange.WebServices.Data;
 
 namespace FlexiMail.Services
 {
-    internal class FlexiExchangeService(
-        ExchangeConfigurations configurations, 
+    internal partial class FlexiExchangeService(
+        ExchangeConfigurations configurations,
         IExchangeBroker exchangeBroker)
         : IFlexiExchangeService
     {
         private readonly IExchangeBroker exchangeBroker = exchangeBroker;
-        
-        public async void SendAndSaveCopyAsync(FlexiMessage flexiMessage)
-        {
-            var exchangeService = await CreateExchangeServiceAsync();
-            var emailMessage = new EmailMessage(service: exchangeService)
+
+        public ValueTask SendAndSaveCopyAsync(FlexiMessage flexiMessage) =>
+            TryCatch(async () =>
             {
-                Subject = flexiMessage.Subject,
-                Body = new MessageBody(
-                    bodyType: MapBodyType(bodyContentType: flexiMessage.Body.ContentType),
-                    text: flexiMessage.Body.Content)
-            };
+                ValidFlexiMessage(flexiMessage);
 
-            emailMessage.ToRecipients.AddAddresses(flexiMessage.To);
-            emailMessage.CcRecipients.AddAddresses(flexiMessage.Cc);
-            emailMessage.BccRecipients.AddAddresses(flexiMessage.Bcc);
-
-            var tempFiles = new List<string>();
-
-            if (flexiMessage.Attachments != null)
-            {
-                foreach (var attachment in flexiMessage.Attachments)
+                var exchangeService = await CreateExchangeServiceAsync();
+                var emailMessage = new EmailMessage(service: exchangeService)
                 {
-                    var tempFilePath = Path.Combine(Path.GetTempPath(), attachment.Name);
-                    await File.WriteAllBytesAsync(tempFilePath, attachment.Bytes);
+                    Subject = flexiMessage.Subject,
+                    Body = new MessageBody(bodyType: MapBodyType(bodyContentType: flexiMessage.Body.ContentType),
+                        text: flexiMessage.Body.Content)
+                };
 
-                    tempFiles.Add(tempFilePath);
+                emailMessage.ToRecipients.AddAddresses(flexiMessage.To);
+                emailMessage.CcRecipients.AddAddresses(flexiMessage.Cc);
+                emailMessage.BccRecipients.AddAddresses(flexiMessage.Bcc);
 
-                    emailMessage.Attachments.AddFileAttachment(attachment.Name, tempFilePath);
+                var tempFiles = new List<string>();
+
+                if (flexiMessage.Attachments != null)
+                {
+                    foreach (var attachment in flexiMessage.Attachments)
+                    {
+                        var tempFilePath = Path.Combine(Path.GetTempPath(), attachment.Name);
+                        await File.WriteAllBytesAsync(tempFilePath, attachment.Bytes);
+
+                        tempFiles.Add(tempFilePath);
+
+                        emailMessage.Attachments.AddFileAttachment(attachment.Name, tempFilePath);
+                    }
                 }
-            }
 
-            this.exchangeBroker.SendAndSaveCopy(emailMessage: emailMessage);
+                this.exchangeBroker.SendAndSaveCopy(emailMessage: emailMessage);
 
-            foreach (var filePath in tempFiles)
-            {
-                File.Delete(filePath);
-            }
-        }
+                foreach (var filePath in tempFiles)
+                {
+                    File.Delete(filePath);
+                }
+            });
+
         private async ValueTask<ExchangeService> CreateExchangeServiceAsync()
         {
             var accessToken = await this.exchangeBroker.GetAccessTokenAsync();
@@ -71,6 +74,7 @@ namespace FlexiMail.Services
             return this.exchangeBroker.CreateExchangeService(ExchangeVersion.Exchange2013, accessToken,
                 impersonatedUserId);
         }
+
         private string GetUserId(ConnectingIdType idType) => idType switch
         {
             ConnectingIdType.PrincipalName => configurations.PrincipalName,
@@ -78,6 +82,7 @@ namespace FlexiMail.Services
             ConnectingIdType.SID => configurations.Sid,
             _ => configurations.SmtpAddress
         };
+
         private ConnectingIdType GetConnectingIdType()
         {
             if (!string.IsNullOrWhiteSpace(configurations.SmtpAddress))
@@ -90,6 +95,7 @@ namespace FlexiMail.Services
                 ? ConnectingIdType.PrincipalName
                 : ConnectingIdType.SmtpAddress;
         }
+
         private static BodyType MapBodyType(BodyContentType bodyContentType) => bodyContentType switch
         {
             BodyContentType.Html => BodyType.HTML,

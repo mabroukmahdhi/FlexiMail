@@ -5,7 +5,6 @@
 
 using FlexiMail.Brokers.Exchanges;
 using FlexiMail.Models.Configurations;
-using FlexiMail.Models.Foundations.Attachments;
 using FlexiMail.Models.Foundations.Messages;
 using FlexiMail.Services;
 using Microsoft.Exchange.WebServices.Data;

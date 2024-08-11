@@ -3,7 +3,6 @@
 // Made with love for the .NET Community
 // ---------------------------------------
 
-using System;
 using FlexiMail.Models.Foundations.Messages;
 using FlexiMail.Models.Foundations.Messages.Exceptions;
 using FluentAssertions;
@@ -15,7 +14,7 @@ namespace FlexiMail.Tests.Unit.Services
     public partial class FlexiExchangeServiceTests
     {
         [Fact]
-        public void ShouldThrowValidationExceptionIfFlexiMessageIsNull()
+        public async void ShouldThrowValidationExceptionIfFlexiMessageIsNull()
         {
             // given 
             FlexiMessage nullMessage = null;
@@ -30,12 +29,16 @@ namespace FlexiMail.Tests.Unit.Services
                     innerException: nullFlexiMessageException);
 
             // when
-            void SendMessageAction() => this.flexiExchangeService.SendAndSaveCopyAsync(nullMessage);
+            var sendMessageTask =
+                this.flexiExchangeService.SendAndSaveCopyAsync(nullMessage);
 
-            var actualException = Assert.Throws<FlexiMessageValidationException>((Action)SendMessageAction);
+            var actualFlexiMessageValidationException =
+                await Assert.ThrowsAsync<FlexiMessageValidationException>(
+                    sendMessageTask.AsTask);
             // then
 
-            actualException.Should().BeEquivalentTo(expectedFlexiMessageValidationException);
+            actualFlexiMessageValidationException.Should()
+                .BeEquivalentTo(expectedFlexiMessageValidationException);
 
             this.exchangeBrokerMock.Verify(broker =>
                     broker.GetAccessTokenAsync(),
