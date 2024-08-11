@@ -1,9 +1,9 @@
-//---------------------------------------
+// ---------------------------------------
 // Copyright (c) 2024 Mabrouk Mahdhi.
 // Made with love for the .NET Community
-//---------------------------------------
+// ---------------------------------------
 
-namespace FlexiMail.Tests.Unit
+namespace FlexiMail.Test.Integration
 {
     public class DeleteMe
     {
