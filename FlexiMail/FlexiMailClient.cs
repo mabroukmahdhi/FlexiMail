@@ -13,10 +13,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FlexiMail
 {
+    /// <summary>
+    /// Client class to send mails through Exchange WebServices.
+    /// </summary>
     public class FlexiMailClient : IFlexiMailClient
     {
         private readonly IFlexiExchangeService exchangeService;
 
+        /// <summary>
+        /// Creates Client Instance.
+        /// </summary>
+        /// <param name="configurations">The Exchange Configurations</param>
         public FlexiMailClient(ExchangeConfigurations configurations)
         {
             var serviceProvider = RegisterServices(configurations);
@@ -25,6 +32,10 @@ namespace FlexiMail
                 serviceProvider.GetRequiredService<IFlexiExchangeService>();
         }
 
+        /// <summary>
+        /// Sends the email.
+        /// </summary>
+        /// <param name="flexiMessage">The email model</param>
         public async ValueTask SendAndSaveCopyAsync(FlexiMessage flexiMessage) =>
             await this.exchangeService.SendAndSaveCopyAsync(flexiMessage);
 

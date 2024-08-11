@@ -4,18 +4,54 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
+        <Title>FlexiMail</Title>
+        <PackageId>FlexiMail</PackageId>
+        <Authors>Mabrouk Mahdhi</Authors>
+        <Company>Mabrouk Mahdhi</Company>
+        <Product>FlexiMail</Product>
+        <Description>FlexiMail is a robust, test-driven C# library tailored specifically for seamless email integration using Microsoft Exchange Web Services (EWS).</Description>
+        <Copyright>Mabrouk Mahdhi (c) 2024</Copyright>
+        <PackageProjectUrl>https://github.com/mabroukmahdhi/FlexiMail</PackageProjectUrl>
+        <PackageIcon>icmail.png</PackageIcon>
+        <RepositoryUrl>https://github.com/mabroukmahdhi/FlexiMail</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>EWS; .NET; Mailing; Message; Exchange; Exchange WebServices</PackageTags>
+        <PackageReleaseNotes>This release offers the beta version of FlexiMail.</PackageReleaseNotes>
+        <AssemblyVersion>0.1</AssemblyVersion>
+        <FileVersion>0.1</FileVersion>
+        <PackageLicenseFile>license.txt</PackageLicenseFile>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+        <Version>0.1</Version>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.Exchange.WebServices" Version="2.2.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-      <PackageReference Include="Microsoft.Identity.Client" Version="4.63.0" />
-      <PackageReference Include="Xeption" Version="2.8.0" />
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Update="icmail.png">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Update="license.txt">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="FlexiMail.Tests.Unit" />
-        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" /> 
+        <PackageReference Include="Microsoft.Exchange.WebServices" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.Identity.Client" Version="4.63.0"/>
+        <PackageReference Include="Xeption" Version="2.8.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="FlexiMail.Tests.Unit"/>
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
     </ItemGroup>
 
 </Project>
