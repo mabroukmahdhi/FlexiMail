@@ -12,4 +12,9 @@
       <PackageReference Include="Microsoft.Identity.Client" Version="4.63.0" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="FlexiMail.Tests.Unit" />
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" /> 
+    </ItemGroup>
+
 </Project>

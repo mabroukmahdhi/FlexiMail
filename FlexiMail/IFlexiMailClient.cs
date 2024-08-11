@@ -5,9 +5,10 @@
 
 using FlexiMail.Models.Foundations.Messages;
 
-namespace FlexiMail;
-
-public interface IFlexiMailClient
+namespace FlexiMail
 {
-    void SendAndSaveCopyAsync(FlexiMessage flexiMessage);
+    public interface IFlexiMailClient
+    {
+        void SendAndSaveCopyAsync(FlexiMessage flexiMessage);
+    }
 }
