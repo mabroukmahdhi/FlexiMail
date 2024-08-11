@@ -49,14 +49,31 @@ namespace FlexiMail.Tests.Unit.Services
                 Times.Once);
         }
 
-        [Fact]
-        public async void ShouldSendAndSaveCopyIfOnlyToAddressAddedAsync()
+        [Theory]
+        [InlineData(true, false, false)] // Only To address is added
+        [InlineData(false, true, false)] // Only Cc address is added
+        [InlineData(false, false, true)] // Only Bcc address is added
+        public async void ShouldSendAndSaveCopyBasedOnAddressTypeAsync(bool hasTo, bool hasCc, bool hasBcc)
         {
             // given
             var randomAccessToken = GetRandomString();
             var randomMessage = CreateRandomFlexiMessage();
-            randomMessage.Bcc = null;
-            randomMessage.Cc = null;
+
+            if (!hasTo)
+            {
+                randomMessage.To = null;
+            }
+
+            if (!hasCc)
+            {
+                randomMessage.Cc = null;
+            }
+
+            if (!hasBcc)
+            {
+                randomMessage.Bcc = null;
+            }
+
             var randomExchangeService = CreateExchangeService();
 
             this.exchangeBrokerMock.Setup(broker =>

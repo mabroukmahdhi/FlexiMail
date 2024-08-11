@@ -3,6 +3,7 @@
 // Made with love for the .NET Community
 // ---------------------------------------
 
+using System.Collections.Generic;
 using FlexiMail.Brokers.Exchanges;
 using FlexiMail.Models.Configurations;
 using FlexiMail.Models.Foundations.Messages;
@@ -68,5 +69,7 @@ namespace FlexiMail.Tests.Unit.Services
         {
             return new ExchangeService();
         }
+
+        private static List<string> GetEmptyList() => [];
     }
 }
