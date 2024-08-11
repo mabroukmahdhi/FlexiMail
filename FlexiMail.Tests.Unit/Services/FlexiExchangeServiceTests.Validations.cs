@@ -70,19 +70,19 @@ namespace FlexiMail.Tests.Unit.Services
 
             var invalidFlexiMessageException =
                 new InvalidFlexiMessageException(
-                    message: "FlexiMessage has no receiver.");
+                    message: "Invalid message error occurred, fix errors and try again.");
 
             invalidFlexiMessageException.AddData(
                 key: nameof(FlexiMessage.To),
-                values: "To is not set.");
+                values: "Value is not set");
 
             invalidFlexiMessageException.AddData(
                 key: nameof(FlexiMessage.Cc),
-                values: "Cc is not set.");
+                values: "Value is not set");
 
             invalidFlexiMessageException.AddData(
                 key: nameof(FlexiMessage.Bcc),
-                values: "Bcc is not set.");
+                values: "Value is not set");
 
             var expectedFlexiMessageValidationException =
                 new FlexiMessageValidationException(

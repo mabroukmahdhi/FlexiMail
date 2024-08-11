@@ -23,6 +23,10 @@ namespace FlexiMail.Services
             {
                 throw CreateValidationException(nullFlexiMessageException);
             }
+            catch (InvalidFlexiMessageException invalidFlexiMessageException)
+            {
+                throw CreateValidationException(invalidFlexiMessageException);
+            }
         }
 
         private static FlexiMessageValidationException CreateValidationException(Xeption exception)
