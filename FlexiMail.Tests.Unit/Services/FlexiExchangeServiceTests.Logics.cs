@@ -48,5 +48,46 @@ namespace FlexiMail.Tests.Unit.Services
                     broker.SendAndSaveCopy(It.IsAny<EmailMessage>()),
                 Times.Once);
         }
+
+        [Fact]
+        public async void ShouldSendAndSaveCopyIfOnlyToAddressAddedAsync()
+        {
+            // given
+            var randomAccessToken = GetRandomString();
+            var randomMessage = CreateRandomFlexiMessage();
+            randomMessage.Bcc = null;
+            randomMessage.Cc = null;
+            var randomExchangeService = CreateExchangeService();
+
+            this.exchangeBrokerMock.Setup(broker =>
+                    broker.GetAccessTokenAsync())
+                .ReturnsAsync(randomAccessToken);
+
+            this.exchangeBrokerMock.Setup(broker =>
+                    broker.CreateExchangeService(
+                        ExchangeVersion.Exchange2013,
+                        randomAccessToken,
+                        It.IsAny<ImpersonatedUserId>()))
+                .Returns(randomExchangeService);
+
+            // when
+            await this.flexiExchangeService.SendAndSaveCopyAsync(randomMessage);
+
+            // then
+            this.exchangeBrokerMock.Verify(broker =>
+                    broker.GetAccessTokenAsync(),
+                Times.Once);
+
+            this.exchangeBrokerMock.Verify(broker =>
+                    broker.CreateExchangeService(
+                        ExchangeVersion.Exchange2013,
+                        randomAccessToken,
+                        It.IsAny<ImpersonatedUserId>()),
+                Times.Once);
+
+            this.exchangeBrokerMock.Verify(broker =>
+                    broker.SendAndSaveCopy(It.IsAny<EmailMessage>()),
+                Times.Once);
+        }
     }
 }
