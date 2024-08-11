@@ -12,13 +12,28 @@ provides an easy-to-use interface for sending emails and managing various email-
 
 ## Installation
 
-To install **FlexiMail**, you can add the project to your solution manually.
+You can install **FlexiMail** via NuGet or by adding the project to your solution manually.
+
+### NuGet Installation
+
+To install FlexiMail using NuGet, run the following command in the NuGet Package Manager Console:
+
+```bash
+Install-Package FlexiMail
+```
+Or, you can find the package on [NuGet](https://www.nuget.org/packages/FlexiMail). 
+
+### .NET CLI Installation
+To install FlexiMail using the .NET CLI, use the following command:
+```bash
+dotnet add package FlexiMail
+```
 
 ### Manual Installation
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/FlexiMail.git
+    git clone https://github.com/mabroukmahdhi/FlexiMail
     ```
 2. Add the `FlexiMail` project to your solution.
 
