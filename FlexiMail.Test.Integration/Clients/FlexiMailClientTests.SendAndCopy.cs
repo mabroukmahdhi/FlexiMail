@@ -16,7 +16,7 @@ namespace FlexiMail.Test.Integration.Clients
             // Given
             var flexiMessage = new FlexiMessage()
             {
-                Subject = "FlexiMessage is a cool library",
+                Subject = "FlexiMail is a cool library",
                 To = [GetReceiverTestEmail()],
                 Body = new FlexiBody
                 {
