@@ -25,12 +25,8 @@ namespace FlexiMail.Test.Integration.Clients
                 }
             };
 
-            // when 
-            var sendMessageTask =
-                this.flexiMailClient.SendAndSaveCopyAsync(flexiMessage);
-
-            // then
-            Assert.True(sendMessageTask.IsCompletedSuccessfully, "The message should be sent and copied successfully.");
+            // when then
+            await this.flexiMailClient.SendAndSaveCopyAsync(flexiMessage);
         }
     }
 }
