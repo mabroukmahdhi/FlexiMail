@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿//---------------------------------------
+// Copyright (c) 2024 Mabrouk Mahdhi.
+// Made with love for the .NET Community
+//---------------------------------------
+
+using System.Collections.Generic;
 using System.IO;
 using ADotNet.Clients;
 using ADotNet.Models.Pipelines.GithubPipelines.DotNets;
