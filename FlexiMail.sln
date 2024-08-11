@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexiMail", "FlexiMail\Flex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexiMail.Tests.Unit", "FlexiMail.Tests.Unit\FlexiMail.Tests.Unit.csproj", "{E7E74297-E2B4-4A5F-9F10-13CFDB1DDF69}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexiMail.Infrastructure.Build", "FlexiMail.Infrastructure.Build\FlexiMail.Infrastructure.Build.csproj", "{5DDAB7DA-8535-413C-BF4E-E76FC5BF24CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{E7E74297-E2B4-4A5F-9F10-13CFDB1DDF69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7E74297-E2B4-4A5F-9F10-13CFDB1DDF69}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7E74297-E2B4-4A5F-9F10-13CFDB1DDF69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DDAB7DA-8535-413C-BF4E-E76FC5BF24CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DDAB7DA-8535-413C-BF4E-E76FC5BF24CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DDAB7DA-8535-413C-BF4E-E76FC5BF24CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DDAB7DA-8535-413C-BF4E-E76FC5BF24CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

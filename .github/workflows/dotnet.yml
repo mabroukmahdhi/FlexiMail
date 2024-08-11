@@ -1,0 +1,32 @@
+name: FlexiMail Build
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Pulling Code
+      uses: actions/checkout@v3
+    - name: Installing .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.*
+    - name: Restoring Packages
+      run: dotnet restore
+    - name: Building Solution
+      run: dotnet build --no-restore
+    - name: Running Tests
+      run: dotnet test --no-build --verbosity normal
+    env:
+      Authority: ${{ secrets.AUTHORITY }}
+      ClientId: ${{ secrets.CLIENTID }}
+      ClientSecret: ${{ secrets.CLIENTSECRET }}
+      PrincipalName: ${{ secrets.PRINCIPALNAME }}
+      Sid: ${{ secrets.SID }}
+      SmtpAddress: ${{ secrets.SMTPADDRESS }}
+      TenantId: ${{ secrets.TENANTID }}
