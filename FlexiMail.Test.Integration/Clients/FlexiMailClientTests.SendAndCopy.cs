@@ -1,0 +1,36 @@
+// ---------------------------------------
+// Copyright (c) 2024 Mabrouk Mahdhi.
+// Made with love for the .NET Community
+// ---------------------------------------
+
+using FlexiMail.Models.Foundations.Bodies;
+using FlexiMail.Models.Foundations.Messages;
+
+namespace FlexiMail.Test.Integration.Clients
+{
+    public partial class FlexiMailClientTests
+    {
+        [Fact]
+        public async void ShouldSendAndCopyMessageAsync()
+        {
+            // Given
+            var flexiMessage = new FlexiMessage()
+            {
+                Subject = "FlexiMessage is a cool library",
+                To = [GetReceiverTestEmail()],
+                Body = new FlexiBody
+                {
+                    Content = "<h3>This is a test</h3><p>Bonjour tout le monde!</p>",
+                    ContentType = BodyContentType.Html
+                }
+            };
+
+            // when 
+            var sendMessageTask =
+                this.flexiMailClient.SendAndSaveCopyAsync(flexiMessage);
+
+            // then
+            Assert.True(sendMessageTask.IsCompletedSuccessfully, "The message should be sent and copied successfully.");
+        }
+    }
+}

@@ -4,6 +4,7 @@
 //---------------------------------------
 
 using System;
+using System.Threading.Tasks;
 using FlexiMail.Brokers.Exchanges;
 using FlexiMail.Models.Configurations;
 using FlexiMail.Models.Foundations.Messages;
@@ -24,8 +25,8 @@ namespace FlexiMail
                 serviceProvider.GetRequiredService<IFlexiExchangeService>();
         }
 
-        public void SendAndSaveCopyAsync(FlexiMessage flexiMessage) =>
-            this.exchangeService.SendAndSaveCopyAsync(flexiMessage);
+        public async ValueTask SendAndSaveCopyAsync(FlexiMessage flexiMessage) =>
+            await this.exchangeService.SendAndSaveCopyAsync(flexiMessage);
 
         private static IServiceProvider RegisterServices(ExchangeConfigurations configurations)
         {

@@ -3,12 +3,13 @@
 // Made with love for the .NET Community
 // ---------------------------------------
 
+using System.Threading.Tasks;
 using FlexiMail.Models.Foundations.Messages;
 
 namespace FlexiMail
 {
     public interface IFlexiMailClient
     {
-        void SendAndSaveCopyAsync(FlexiMessage flexiMessage);
+        ValueTask SendAndSaveCopyAsync(FlexiMessage flexiMessage);
     }
 }
