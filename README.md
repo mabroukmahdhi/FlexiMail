@@ -1,7 +1,15 @@
+<p align="center">
+  <img  src="https://github.com/mabroukmahdhi/FlexiMail/blob/main/FlexiMail/icmail.png">
+</p>
+
 # FlexiMail
 
 **FlexiMail** is a flexible email client library designed to integrate seamlessly into your .NET applications. It
 provides an easy-to-use interface for sending emails and managing various email-related tasks.
+
+[![Nuget](https://img.shields.io/nuget/v/FlexiMail)](https://www.nuget.org/packages/FlexiMail/)
+[![Nuget](https://img.shields.io/nuget/dt/FlexiMail)](https://www.nuget.org/packages/FlexiMail/)
+![.NET 8](https://img.shields.io/badge/.NET_8-COMPATIBLE-2ea44f)
 
 ## Features
 
