@@ -41,34 +41,49 @@ dotnet add package FlexiMail
 
 ## Usage
 
-To use FlexiMail, follow the steps below:
+To use **FlexiMail**, follow the steps below:
 
 ### Basic Example
 
 ```csharp
-using FlexiMail;
+using FlexiMail.Models.Configurations;
+using FlexiMail.Models.Foundations.Bodies;
+using FlexiMail.Models.Foundations.Messages;
 
-public class EmailService
+namespace FlexiMail.Sample
 {
-    private readonly IFlexiMailClient flexiMailClient;
-
-    public EmailService(IFlexiMailClient flexiMailClient) =>
-        this.flexiMailClient = flexiMailClient;
-
-    public async Task SendWelcomeEmail(string recipientEmail)
+    class Program
     {
-        var flexiMessage = new FlexiMessage()
+        static async Task Main(string[] args)
+        {
+            var configurations = new ExchangeConfigurations
             {
-                Subject = "FlexiMail is a cool library",
-                To = [recipientEmail],
+                ClientId = "your-client-id",
+                ClientSecret = "your-client-secret",
+                TenantId = "your-tenant-id", 
+                Authority = "https://login.microsoftonline.com/{your-tenant-id}",
+                Scopes = ["https://outlook.office365.com/.default"],
+                SmtpAddress = "your-sender-email"
+            };
+
+            var flexiMailClient = new FlexiMailClient(configurations);
+
+            var nessage = new FlexiMessage
+            {
+                To = ["email@domain.com"],
+                Cc = ["other-email@domain.com"],
+                Subject = "Keep testing FlexiMail",
                 Body = new FlexiBody
                 {
-                    Content = "<h3>Welcome to FlexiMail</h3><p>Bonjour tout le monde!</p>",
-                    ContentType = BodyContentType.Html
+                    Content = "This is the message body. It can be a plain text or HTML.",
+                    ContentType = BodyContentType.PlainText
                 }
             };
 
-        await this.flexiMailClient.SendAndSaveCopyAsync(flexiMessage);
+            await flexiMailClient.SendAndSaveCopyAsync(nessage);
+
+            Console.ReadKey();
+        }
     }
 }
 ```
@@ -80,20 +95,18 @@ configuration file:
 
 ```json
 {
-  "ExchangeConfigurations": {
-    "ClientId": "your-client-id",
-    "ClientSecret": "your-client-secret",
-    "TenantId": "your-tenant-id",
-    "SmtpAddress": "your-smtp-address",
-    "Sid": "your-sid",
-    "PrincipalName": "your-principal-name",
-    "Authority": "your-authority",
-    "Scopes": [
-      "scope1",
-      "scope2",
-      "scope3"
-    ]
-  }
+   "ExchangeConfigurations": {
+      "ClientId": "your-client-id",
+      "ClientSecret": "your-client-secret",
+      "TenantId": "your-tenant-id",
+      "SmtpAddress": "your-smtp-address",
+      "Sid": "your-sid",
+      "PrincipalName": "your-principal-name",
+      "Authority": "your-authority",
+      "Scopes": [
+         "https://outlook.office365.com/.default"
+      ]
+   }
 }
 
 ```
@@ -112,21 +125,6 @@ to [The-Standard](https://github.com/hassanhabib/The-Standard):
 
 The main class, `FlexiMailClient`, implements the `IFlexiMailClient` interface and serves as the entry point for most
 operations.
-
-## Testing
-
-Unit tests are provided to ensure the reliability of the **FlexiMail** library. The tests are located in the
-`FlexiMail.Tests.Unit` and `FlexiMail.Test.Integration` projects.
-
-### Running Tests
-
-To run the tests, use the following command in the terminal:
-
-```bash
-dotnet test
-```
-
-Ensure that all dependencies are restored before running the tests.
 
 ## Contributing
 
