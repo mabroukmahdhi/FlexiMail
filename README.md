@@ -76,7 +76,7 @@ namespace FlexiMail.Sample
 
             var flexiMailClient = new FlexiMailClient(configurations);
 
-            var nessage = new FlexiMessage
+            var message = new FlexiMessage
             {
                 To = ["email@domain.com"],
                 Cc = ["other-email@domain.com"],
@@ -88,7 +88,7 @@ namespace FlexiMail.Sample
                 }
             };
 
-            await flexiMailClient.SendAndSaveCopyAsync(nessage);
+            await flexiMailClient.SendAndSaveCopyAsync(message);
 
             Console.ReadKey();
         }
