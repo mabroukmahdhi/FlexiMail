@@ -15,12 +15,12 @@ namespace FlexiMail.Brokers.Exchanges
 
         ExchangeService CreateExchangeService(ExchangeVersion version, string accessToken,
             ImpersonatedUserId impersonatedUserId);
- 
+
         void Reply(EmailMessage emailMessage, MessageBody bodyPrefix, bool replyAll);
         void Forward(EmailMessage emailMessage, MessageBody bodyPrefix, params EmailAddress[] toRecipients);
         void Forward(EmailMessage emailMessage, MessageBody bodyPrefix, IEnumerable<EmailAddress> toRecipients);
         void Send(EmailMessage emailMessage);
-        void SendAndSaveCopy(EmailMessage emailMessage,FolderId destinationFolderId);
+        void SendAndSaveCopy(EmailMessage emailMessage, FolderId destinationFolderId);
         void SendAndSaveCopy(EmailMessage emailMessage);
         void SuppressReadReceipt(EmailMessage emailMessage);
     }

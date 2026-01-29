@@ -15,7 +15,7 @@ namespace FlexiMail.Infrastructure.Build
     internal class Program
     {
         private const string BuildScriptPath = "../../../../.github/workflows/dotnet.yml";
-        
+
         private static void Main(string[] args)
         {
             var adoNetClient = new ADotNetClient();

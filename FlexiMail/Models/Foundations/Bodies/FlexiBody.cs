@@ -10,4 +10,4 @@ namespace FlexiMail.Models.Foundations.Bodies
         public string Content { get; set; }
         public BodyContentType ContentType { get; set; }
     }
-} 
+}

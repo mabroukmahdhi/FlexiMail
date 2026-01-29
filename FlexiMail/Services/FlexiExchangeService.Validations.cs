@@ -3,8 +3,6 @@
 // Made with love for the .NET Community
 // ---------------------------------------
 
-using System.Formats.Tar;
-using System.Linq;
 using FlexiMail.Models.Foundations.Messages;
 using FlexiMail.Models.Foundations.Messages.Exceptions;
 
@@ -19,7 +17,9 @@ namespace FlexiMail.Services
             if ((flexiMessage.To?.Count ?? 0) > 0
                 || (flexiMessage.Cc?.Count ?? 0) > 0
                 || (flexiMessage.Bcc?.Count ?? 0) > 0)
+            {
                 return;
+            }
 
             Validate((Rule: IsInvalid(flexiMessage.To), Parameter: nameof(FlexiMessage.To)),
                 (Rule: IsInvalid(flexiMessage.Cc), Parameter: nameof(FlexiMessage.Cc)),
@@ -29,7 +29,9 @@ namespace FlexiMail.Services
         private static void ValidFlexiMessageIsNotNull(FlexiMessage flexiMessage)
         {
             if (flexiMessage == null)
+            {
                 throw new NullFlexiMessageException(message: "FlexiMessage is null.");
+            }
         }
 
         private static dynamic IsInvalid(object @object) => new

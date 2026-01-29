@@ -4,8 +4,6 @@
 // ---------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using FlexiMail.Models.Configurations;
 
 namespace FlexiMail.Test.Integration.Clients

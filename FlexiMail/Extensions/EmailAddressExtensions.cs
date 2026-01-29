@@ -13,7 +13,9 @@ namespace FlexiMail.Extensions
         public static void AddAddresses(this EmailAddressCollection emailAddressCollection, List<string> addresses)
         {
             if (addresses == null)
+            {
                 return;
+            }
 
             foreach (var cc in addresses)
             {

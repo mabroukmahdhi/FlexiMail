@@ -86,10 +86,14 @@ namespace FlexiMail.Services
         private ConnectingIdType GetConnectingIdType()
         {
             if (!string.IsNullOrWhiteSpace(configurations.SmtpAddress))
+            {
                 return ConnectingIdType.SmtpAddress;
+            }
 
             if (!string.IsNullOrWhiteSpace(configurations.Sid))
+            {
                 return ConnectingIdType.SID;
+            }
 
             return !string.IsNullOrWhiteSpace(configurations.PrincipalName)
                 ? ConnectingIdType.PrincipalName
