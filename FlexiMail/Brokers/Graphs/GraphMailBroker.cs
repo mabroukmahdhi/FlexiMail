@@ -40,6 +40,11 @@ namespace FlexiMail.Brokers.Graphs
             IEnumerable<FlexiAttachment> attachments,
             bool saveToSentItems = true)
         {
+            var mappedAttachments = MapAttachments(attachments);
+            var mappedToRecipients = MapRecipients(toRecipients);
+            var mappedCcRecipients = MapRecipients(ccRecipients);
+            var mappedBccRecipients = MapRecipients(bccRecipients);
+
             var message = new Message
             {
                 Subject = subject,
@@ -48,13 +53,28 @@ namespace FlexiMail.Brokers.Graphs
                 {
                     ContentType = MapBodyType(bodyContentType),
                     Content = body
-                },
-
-                ToRecipients = MapRecipients(toRecipients),
-                CcRecipients = MapRecipients(ccRecipients),
-                BccRecipients = MapRecipients(bccRecipients),
-                Attachments = MapAttachments(attachments)
+                }
             };
+
+            if (mappedToRecipients != null)
+            {
+                message.ToRecipients = mappedToRecipients;
+            }
+
+            if (mappedCcRecipients != null)
+            {
+                message.CcRecipients = mappedCcRecipients;
+            }
+
+            if (mappedBccRecipients != null)
+            {
+                message.BccRecipients = mappedBccRecipients;
+            }
+
+            if (mappedAttachments != null)
+            {
+                message.Attachments = mappedAttachments;
+            }
 
             await this.graphClient.Users[fromUserIdOrUpn]
                 .SendMail
