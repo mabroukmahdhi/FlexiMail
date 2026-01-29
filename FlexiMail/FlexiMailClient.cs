@@ -60,8 +60,9 @@ namespace FlexiMail
                 exchangeConfigurations: new ExchangeConfigurations(),
                 graphMailConfigurations: configurations);
 
-            this.exchangeService =
-                serviceProvider.GetRequiredService<IFlexiExchangeService>();
+            this.exchangeService = null;
+            this.graphService =
+                serviceProvider.GetRequiredService<IFlexiGraphService>();
         }
 
         /// <summary>
