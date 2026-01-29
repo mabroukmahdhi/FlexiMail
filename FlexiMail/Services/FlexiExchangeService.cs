@@ -3,6 +3,7 @@
 // Made with love for the .NET Community
 // ---------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using Microsoft.Exchange.WebServices.Data;
 
 namespace FlexiMail.Services
 {
+    [Obsolete]
     internal partial class FlexiExchangeService(
         ExchangeConfigurations configurations,
         IExchangeBroker exchangeBroker)
@@ -23,44 +25,47 @@ namespace FlexiMail.Services
         private readonly IExchangeBroker exchangeBroker = exchangeBroker;
 
         public ValueTask SendAndSaveCopyAsync(FlexiMessage flexiMessage) =>
-            TryCatch(async () =>
+        TryCatch(async () =>
+        {
+            ValidFlexiMessage(flexiMessage);
+
+            var exchangeService = await CreateExchangeServiceAsync();
+
+            var emailMessage = new EmailMessage(service: exchangeService)
             {
-                ValidFlexiMessage(flexiMessage);
+                Subject = flexiMessage.Subject,
 
-                var exchangeService = await CreateExchangeServiceAsync();
-                var emailMessage = new EmailMessage(service: exchangeService)
+                Body = new MessageBody(
+                    bodyType: MapBodyType(bodyContentType: flexiMessage.Body.ContentType),
+                    text: flexiMessage.Body.Content)
+            };
+
+            emailMessage.ToRecipients.AddAddresses(flexiMessage.To);
+            emailMessage.CcRecipients.AddAddresses(flexiMessage.Cc);
+            emailMessage.BccRecipients.AddAddresses(flexiMessage.Bcc);
+
+            var tempFiles = new List<string>();
+
+            if (flexiMessage.Attachments != null)
+            {
+                foreach (var attachment in flexiMessage.Attachments)
                 {
-                    Subject = flexiMessage.Subject,
-                    Body = new MessageBody(bodyType: MapBodyType(bodyContentType: flexiMessage.Body.ContentType),
-                        text: flexiMessage.Body.Content)
-                };
+                    var tempFilePath = Path.Combine(Path.GetTempPath(), attachment.Name);
+                    await File.WriteAllBytesAsync(tempFilePath, attachment.Bytes);
 
-                emailMessage.ToRecipients.AddAddresses(flexiMessage.To);
-                emailMessage.CcRecipients.AddAddresses(flexiMessage.Cc);
-                emailMessage.BccRecipients.AddAddresses(flexiMessage.Bcc);
+                    tempFiles.Add(tempFilePath);
 
-                var tempFiles = new List<string>();
-
-                if (flexiMessage.Attachments != null)
-                {
-                    foreach (var attachment in flexiMessage.Attachments)
-                    {
-                        var tempFilePath = Path.Combine(Path.GetTempPath(), attachment.Name);
-                        await File.WriteAllBytesAsync(tempFilePath, attachment.Bytes);
-
-                        tempFiles.Add(tempFilePath);
-
-                        emailMessage.Attachments.AddFileAttachment(attachment.Name, tempFilePath);
-                    }
+                    emailMessage.Attachments.AddFileAttachment(attachment.Name, tempFilePath);
                 }
+            }
 
-                this.exchangeBroker.SendAndSaveCopy(emailMessage: emailMessage);
+            this.exchangeBroker.SendAndSaveCopy(emailMessage: emailMessage);
 
-                foreach (var filePath in tempFiles)
-                {
-                    File.Delete(filePath);
-                }
-            });
+            foreach (var filePath in tempFiles)
+            {
+                File.Delete(filePath);
+            }
+        });
 
         private async ValueTask<ExchangeService> CreateExchangeServiceAsync()
         {

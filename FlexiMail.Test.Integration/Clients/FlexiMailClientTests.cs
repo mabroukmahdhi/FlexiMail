@@ -14,19 +14,13 @@ namespace FlexiMail.Test.Integration.Clients
 
         public FlexiMailClientTests()
         {
-            var tenantId = Environment.GetEnvironmentVariable("TenantId");
-            var authority = $"https://login.microsoftonline.com/{tenantId}";
-
-            var configurations = new ExchangeConfigurations
+            var configurations = new GraphMailConfigurations
             {
                 ClientId = Environment.GetEnvironmentVariable("ClientId"),
                 ClientSecret = Environment.GetEnvironmentVariable("ClientSecret"),
-                TenantId = tenantId,
-                Authority = authority,
-                SmtpAddress = Environment.GetEnvironmentVariable("SmtpAddress"),
-                PrincipalName = Environment.GetEnvironmentVariable("PrincipalName"),
-                Sid = Environment.GetEnvironmentVariable("Sid"),
-                Scopes = ["https://outlook.office365.com/.default"],
+                TenantId = Environment.GetEnvironmentVariable("TenantId"),
+                SenderUserIdOrUpn = Environment.GetEnvironmentVariable("SmtpAddress"),
+                Scopes = ["https://graph.microsoft.com/.default"],
             };
 
             this.flexiMailClient = new FlexiMailClient(configurations);

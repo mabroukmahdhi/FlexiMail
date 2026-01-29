@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11408.102
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexiMail", "FlexiMail\FlexiMail.csproj", "{3470E854-ADF4-4408-A372-076BCEBD4D30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexiMail.Tests.Unit", "FlexiMail.Tests.Unit\FlexiMail.Tests.Unit.csproj", "{E7E74297-E2B4-4A5F-9F10-13CFDB1DDF69}"
@@ -30,5 +33,8 @@ Global
 		{591680E9-4CF5-40CE-84C4-2F8735E1E606}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{591680E9-4CF5-40CE-84C4-2F8735E1E606}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{591680E9-4CF5-40CE-84C4-2F8735E1E606}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
