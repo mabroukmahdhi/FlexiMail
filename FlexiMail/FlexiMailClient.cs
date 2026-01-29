@@ -29,6 +29,7 @@ namespace FlexiMail
         private readonly IFlexiGraphService graphService;
         private FlexiClientService flexiClientService;
 
+#if NET8_0 || NET9_0
         /// <summary>
         /// Initializes a new instance of the FlexiMailClient class configured to use Exchange services.
         /// </summary>
@@ -48,6 +49,7 @@ namespace FlexiMail
                 serviceProvider.GetRequiredService<IFlexiExchangeService>();
             this.graphService = null;
         }
+#endif
 
         /// <summary>
         /// Initializes a new instance of the FlexiMailClient class using the specified Graph mail configurations.
