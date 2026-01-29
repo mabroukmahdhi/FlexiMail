@@ -6,6 +6,7 @@
 using System.Threading.Tasks;
 using FlexiMail.Brokers.Graphs;
 using FlexiMail.Models.Configurations;
+using FlexiMail.Models.Foundations.Bodies;
 using FlexiMail.Models.Foundations.Messages;
 
 namespace FlexiMail.Services.Graphs
@@ -26,28 +27,20 @@ namespace FlexiMail.Services.Graphs
 
             await this.graphMailBroker.SendAsync(
                 fromUserIdOrUpn: this.configurations.SenderUserIdOrUpn,
-                to: GetPrimaryRecipient(flexiMessage),
+                toRecipients: flexiMessage.To,
+                ccRecipients: flexiMessage.Cc,
+                bccRecipients: flexiMessage.Bcc,
                 subject: flexiMessage.Subject,
-                htmlBody: GetBodyContent(flexiMessage),
+                body: GetBodyContent(flexiMessage),
+                bodyContentType: GetBodyContentType(flexiMessage),
+                attachments: flexiMessage.Attachments,
                 saveToSentItems: true);
         });
 
-        private static string GetPrimaryRecipient(FlexiMessage flexiMessage)
-        {
-            if ((flexiMessage.To?.Count ?? 0) > 0)
-            {
-                return flexiMessage.To[0];
-            }
-
-            if ((flexiMessage.Cc?.Count ?? 0) > 0)
-            {
-                return flexiMessage.Cc[0];
-            }
-
-            return flexiMessage.Bcc[0];
-        }
-
         private static string GetBodyContent(FlexiMessage flexiMessage) =>
             flexiMessage.Body?.Content ?? string.Empty;
+
+        private static BodyContentType GetBodyContentType(FlexiMessage flexiMessage) =>
+            flexiMessage.Body?.ContentType ?? BodyContentType.Html;
     }
 }
