@@ -3,7 +3,6 @@
 // Made with love for the .NET Community
 // ---------------------------------------
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,7 +15,6 @@ using Microsoft.Exchange.WebServices.Data;
 
 namespace FlexiMail.Services
 {
-    [Obsolete]
     internal partial class FlexiExchangeService(
         ExchangeConfigurations configurations,
         IExchangeBroker exchangeBroker)

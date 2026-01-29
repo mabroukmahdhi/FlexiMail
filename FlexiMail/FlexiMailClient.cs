@@ -30,10 +30,12 @@ namespace FlexiMail
         private FlexiClientService flexiClientService;
 
         /// <summary>
-        /// Creates Client Instance.
+        /// Initializes a new instance of the FlexiMailClient class configured to use Exchange services.
         /// </summary>
-        /// <param name="configurations">The Exchange Configurations</param>
-        [Obsolete(message: "Use FlexiMailClient(GraphMailConfigurations) instead.")]
+        /// <remarks>This constructor sets up the client to interact with Exchange only. The Graph service
+        /// is not initialized when using this constructor.</remarks>
+        /// <param name="configurations">The ExchangeConfigurations object that specifies the settings required to connect to the Exchange service.
+        /// Cannot be null.</param>
         public FlexiMailClient(ExchangeConfigurations configurations)
         {
             flexiClientService = FlexiClientService.Exchange;
