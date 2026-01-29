@@ -2,7 +2,7 @@
 // Copyright (c) 2024 Mabrouk Mahdhi.
 // Made with love for the .NET Community
 // ---------------------------------------
-
+#if !NET10_0
 using System.Collections.Generic;
 using Microsoft.Exchange.WebServices.Data;
 
@@ -24,3 +24,4 @@ namespace FlexiMail.Extensions
         }
     }
 }
+#endif

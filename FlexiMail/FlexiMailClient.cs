@@ -5,7 +5,9 @@
 
 using System;
 using System.Threading.Tasks;
+#if !NET10_0
 using FlexiMail.Brokers.Exchanges;
+#endif
 using FlexiMail.Brokers.Graphs;
 using FlexiMail.Models.Clients;
 using FlexiMail.Models.Configurations;
@@ -89,10 +91,13 @@ namespace FlexiMail
             ExchangeConfigurations exchangeConfigurations,
             GraphMailConfigurations graphMailConfigurations)
         {
-            var serviceCollection = new ServiceCollection()
-                .AddTransient<IExchangeBroker, ExchangeBroker>()
+            var serviceCollection = new ServiceCollection();
+
+#if !NET10_0
+            serviceCollection.AddTransient<IExchangeBroker, ExchangeBroker>()
                     .AddTransient<IFlexiExchangeService, FlexiExchangeService>()
                         .AddSingleton(exchangeConfigurations);
+#endif
 
             serviceCollection.AddTransient<IGraphMailBroker, GraphMailBroker>()
                 .AddTransient<IFlexiGraphService, FlexiGraphService>()

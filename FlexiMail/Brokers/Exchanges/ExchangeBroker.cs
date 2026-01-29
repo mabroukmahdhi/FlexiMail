@@ -2,7 +2,7 @@
 // Copyright (c) 2024 Mabrouk Mahdhi.
 // Made with love for the .NET Community
 // ---------------------------------------
-
+#if !NET10_0
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -64,3 +64,4 @@ namespace FlexiMail.Brokers.Exchanges
             emailMessage.SuppressReadReceipt();
     }
 }
+#endif

@@ -3,6 +3,7 @@
 // Made with love for the .NET Community
 // ---------------------------------------
 
+#if !NET10_0
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Exchange.WebServices.Data;
@@ -25,3 +26,4 @@ namespace FlexiMail.Brokers.Exchanges
         void SuppressReadReceipt(EmailMessage emailMessage);
     }
 }
+#endif
