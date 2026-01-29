@@ -27,6 +27,8 @@ Install-Package FlexiMail
 
 ## Usage
 
+> **Note**: The Exchange constructor of `FlexiMailClient` is compiled only for `net8.0` and `net9.0`. When targeting `net10.0`, use the Graph constructor (`FlexiMailClient(GraphMailConfigurations)`).
+
 ### Send via Exchange (EWS)
 ```csharp
 using FlexiMail;
