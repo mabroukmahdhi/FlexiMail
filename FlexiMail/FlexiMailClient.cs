@@ -37,7 +37,10 @@ namespace FlexiMail
         public FlexiMailClient(ExchangeConfigurations configurations)
         {
             flexiClientService = FlexiClientService.Exchange;
-            var serviceProvider = RegisterExchangeServices(configurations);
+
+            var serviceProvider = RegisterServices(
+                exchangeConfigurations: configurations,
+                graphMailConfigurations: new GraphMailConfigurations());
 
             this.exchangeService =
                 serviceProvider.GetRequiredService<IFlexiExchangeService>();
@@ -52,7 +55,10 @@ namespace FlexiMail
         public FlexiMailClient(GraphMailConfigurations configurations)
         {
             flexiClientService = FlexiClientService.Graph;
-            var serviceProvider = RegisterGraphServices(new GraphMailConfigurations());
+
+            var serviceProvider = RegisterServices(
+                exchangeConfigurations: new ExchangeConfigurations(),
+                graphMailConfigurations: configurations);
 
             this.exchangeService =
                 serviceProvider.GetRequiredService<IFlexiExchangeService>();
@@ -74,28 +80,20 @@ namespace FlexiMail
             await this.exchangeService.SendAndSaveCopyAsync(flexiMessage);
         }
 
-        private static IServiceProvider RegisterExchangeServices(ExchangeConfigurations configurations)
+        private static IServiceProvider RegisterServices(
+            ExchangeConfigurations exchangeConfigurations,
+            GraphMailConfigurations graphMailConfigurations)
         {
             var serviceCollection = new ServiceCollection()
                 .AddTransient<IExchangeBroker, ExchangeBroker>()
                     .AddTransient<IFlexiExchangeService, FlexiExchangeService>()
-                        .AddSingleton(configurations);
+                        .AddSingleton(exchangeConfigurations);
 
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            return serviceProvider;
-        }
-
-        private static IServiceProvider RegisterGraphServices(GraphMailConfigurations configurations)
-        {
-            var serviceCollection = new ServiceCollection()
-                .AddTransient<IGraphMailBroker, GraphMailBroker>()
+            serviceCollection.AddTransient<IGraphMailBroker, GraphMailBroker>()
                 .AddTransient<IFlexiGraphService, FlexiGraphService>()
-                .AddSingleton(configurations);
+                    .AddSingleton(graphMailConfigurations);
 
-            var serviceProvider = serviceCollection.BuildServiceProvider();
-
-            return serviceProvider;
+            return serviceCollection.BuildServiceProvider();
         }
     }
 }
