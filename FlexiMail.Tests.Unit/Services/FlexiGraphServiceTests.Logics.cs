@@ -3,7 +3,6 @@
 // Made with love for the .NET Community
 // ---------------------------------------
 
-using System.Linq;
 using FlexiMail.Services.Graphs;
 using Moq;
 
@@ -24,10 +23,6 @@ namespace FlexiMail.Tests.Unit.Services
                 configurations: configurations,
                 graphMailBroker: this.graphMailBrokerMock.Object);
 
-            var expectedRecipient = randomMessage.To.First();
-            var expectedSubject = randomMessage.Subject;
-            var expectedBody = randomMessage.Body.Content;
-
             // when
             await flexiGraphService.SendAndSaveCopyAsync(randomMessage);
 
@@ -35,9 +30,13 @@ namespace FlexiMail.Tests.Unit.Services
             this.graphMailBrokerMock.Verify(broker =>
                     broker.SendAsync(
                         sender,
-                        expectedRecipient,
-                        expectedSubject,
-                        expectedBody,
+                        randomMessage.To,
+                        randomMessage.Cc,
+                        randomMessage.Bcc,
+                        randomMessage.Subject,
+                        randomMessage.Body.Content,
+                        randomMessage.Body.ContentType,
+                        randomMessage.Attachments,
                         true),
                 Times.Once);
         }
@@ -73,10 +72,6 @@ namespace FlexiMail.Tests.Unit.Services
                 configurations: configurations,
                 graphMailBroker: this.graphMailBrokerMock.Object);
 
-            var expectedRecipient = hasTo
-                ? randomMessage.To.First()
-                    : hasCc ? randomMessage.Cc.First() : randomMessage.Bcc.First();
-
             // when
             await flexiGraphService.SendAndSaveCopyAsync(randomMessage);
 
@@ -84,9 +79,13 @@ namespace FlexiMail.Tests.Unit.Services
             this.graphMailBrokerMock.Verify(broker =>
                     broker.SendAsync(
                         sender,
-                        expectedRecipient,
+                        randomMessage.To,
+                        randomMessage.Cc,
+                        randomMessage.Bcc,
                         randomMessage.Subject,
                         randomMessage.Body.Content,
+                        randomMessage.Body.ContentType,
+                        randomMessage.Attachments,
                         true),
                 Times.Once);
         }

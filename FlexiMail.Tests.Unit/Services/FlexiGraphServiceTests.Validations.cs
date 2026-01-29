@@ -3,7 +3,10 @@
 // Made with love for the .NET Community
 // ---------------------------------------
 
+using System.Collections.Generic;
 using FlexiMail.Models.Configurations;
+using FlexiMail.Models.Foundations.Attachments;
+using FlexiMail.Models.Foundations.Bodies;
 using FlexiMail.Models.Foundations.Messages;
 using FlexiMail.Models.Foundations.Messages.Exceptions;
 using FlexiMail.Services.Graphs;
@@ -44,9 +47,13 @@ namespace FlexiMail.Tests.Unit.Services
             this.graphMailBrokerMock.Verify(broker =>
                     broker.SendAsync(
                         It.IsAny<string>(),
+                        It.IsAny<IEnumerable<string>>(),
+                        It.IsAny<IEnumerable<string>>(),
+                        It.IsAny<IEnumerable<string>>(),
                         It.IsAny<string>(),
                         It.IsAny<string>(),
-                        It.IsAny<string>(),
+                        It.IsAny<BodyContentType>(),
+                        It.IsAny<IEnumerable<FlexiAttachment>>(),
                         It.IsAny<bool>()),
                 Times.Never);
         }
@@ -99,9 +106,13 @@ namespace FlexiMail.Tests.Unit.Services
             this.graphMailBrokerMock.Verify(broker =>
                     broker.SendAsync(
                         It.IsAny<string>(),
+                        It.IsAny<IEnumerable<string>>(),
+                        It.IsAny<IEnumerable<string>>(),
+                        It.IsAny<IEnumerable<string>>(),
                         It.IsAny<string>(),
                         It.IsAny<string>(),
-                        It.IsAny<string>(),
+                        It.IsAny<BodyContentType>(),
+                        It.IsAny<IEnumerable<FlexiAttachment>>(),
                         It.IsAny<bool>()),
                 Times.Never);
         }
@@ -147,9 +158,13 @@ namespace FlexiMail.Tests.Unit.Services
             this.graphMailBrokerMock.Verify(broker =>
                     broker.SendAsync(
                         It.IsAny<string>(),
+                        It.IsAny<IEnumerable<string>>(),
+                        It.IsAny<IEnumerable<string>>(),
+                        It.IsAny<IEnumerable<string>>(),
                         It.IsAny<string>(),
                         It.IsAny<string>(),
-                        It.IsAny<string>(),
+                        It.IsAny<BodyContentType>(),
+                        It.IsAny<IEnumerable<FlexiAttachment>>(),
                         It.IsAny<bool>()),
                 Times.Never);
         }

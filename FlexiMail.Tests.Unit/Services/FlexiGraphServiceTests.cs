@@ -5,6 +5,7 @@
 
 using FlexiMail.Brokers.Graphs;
 using FlexiMail.Models.Configurations;
+using FlexiMail.Models.Foundations.Attachments;
 using FlexiMail.Models.Foundations.Bodies;
 using FlexiMail.Models.Foundations.Messages;
 using FlexiMail.Services.Graphs;
@@ -47,7 +48,7 @@ namespace FlexiMail.Tests.Unit.Services
         private static FlexiMessage CreateRandomFlexiMessage() =>
             new FlexiMessage
             {
-                To = [GetRandomString()],
+                To = [GetRandomString(), GetRandomString()],
                 Cc = [GetRandomString()],
                 Bcc = [GetRandomString()],
                 Subject = GetRandomString(),
@@ -55,7 +56,15 @@ namespace FlexiMail.Tests.Unit.Services
                 {
                     Content = GetRandomString(),
                     ContentType = BodyContentType.Html
-                }
+                },
+                Attachments =
+                [
+                    new FlexiAttachment
+                    {
+                        Name = $"{GetRandomString()}.txt",
+                        Bytes = [1, 2, 3]
+                    }
+                ]
             };
     }
 }
