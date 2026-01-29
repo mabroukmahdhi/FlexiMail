@@ -399,3 +399,4 @@ FodyWeavers.xsd
 .DS_Store
 /.idea
 /FlexiMail.Tests.Manual/FlexiMail.Tests.Manual.csproj
+/FlexiMail.Tests.Manual
