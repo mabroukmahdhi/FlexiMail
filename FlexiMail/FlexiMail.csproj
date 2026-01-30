@@ -1,59 +1,59 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-        <ImplicitUsings>disable</ImplicitUsings>
-        <Nullable>disable</Nullable>
-        <Title>FlexiMail</Title>
-        <PackageId>FlexiMail</PackageId>
-        <Authors>Mabrouk Mahdhi</Authors>
-        <Company>Mabrouk Mahdhi</Company>
-        <Product>FlexiMail</Product>
-        <Description>FlexiMail is a robust, test-driven C# library tailored specifically for seamless email integration using Microsoft Exchange Web Services (EWS).</Description>
-        <Copyright>Mabrouk Mahdhi (c) 2024</Copyright>
-        <PackageProjectUrl>https://github.com/mabroukmahdhi/FlexiMail</PackageProjectUrl>
-        <PackageIcon>icmail.png</PackageIcon>
-        <RepositoryUrl>https://github.com/mabroukmahdhi/FlexiMail</RepositoryUrl>
-        <RepositoryType>git</RepositoryType>
-        <PackageTags>Microsoft Graph; Mail.Send; EWS; .NET; Mailing; Message; Exchange; Exchange WebServices</PackageTags>
-        <PackageReleaseNotes>Allow sending attachements</PackageReleaseNotes>
-        <AssemblyVersion>0.1.5</AssemblyVersion>
-        <FileVersion>0.1.5</FileVersion>
-        <PackageLicenseFile>license.txt</PackageLicenseFile>
-        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-        <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-        <Version>0.1.5</Version>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<Title>FlexiMail</Title>
+		<PackageId>FlexiMail</PackageId>
+		<Authors>Mabrouk Mahdhi</Authors>
+		<Company>Mabrouk Mahdhi</Company>
+		<Product>FlexiMail</Product>
+		<Description>FlexiMail is a robust, test-driven C# library tailored specifically for seamless email integration using Microsoft Exchange Web Services (EWS).</Description>
+		<Copyright>Mabrouk Mahdhi (c) 2024</Copyright>
+		<PackageProjectUrl>https://github.com/mabroukmahdhi/FlexiMail</PackageProjectUrl>
+		<PackageIcon>icmail.png</PackageIcon>
+		<RepositoryUrl>https://github.com/mabroukmahdhi/FlexiMail</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>Microsoft Graph; Mail.Send; EWS; .NET; Mailing; Message; Exchange; Exchange WebServices</PackageTags>
+		<PackageReleaseNotes>Ignore EWS for .NET 10</PackageReleaseNotes>
+		<AssemblyVersion>0.1.6</AssemblyVersion>
+		<FileVersion>0.1.6</FileVersion>
+		<PackageLicenseFile>license.txt</PackageLicenseFile>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Version>0.1.6</Version>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <None Include="..\README.md">
-            <Pack>True</Pack>
-            <PackagePath>\</PackagePath>
-        </None>
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 		<None Include="icmail.png">
-            <Pack>True</Pack>
-            <PackagePath>\</PackagePath>
-        </None>
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 		<None Include="license.txt">
-            <Pack>True</Pack>
-            <PackagePath>\</PackagePath>
-        </None>
-    </ItemGroup>
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Azure.Identity" Version="1.17.1" />
-        <PackageReference Condition="'$(TargetFramework)' != 'net10.0'" Include="Microsoft.Exchange.WebServices" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
-        <PackageReference Include="Microsoft.Graph" Version="5.101.0" />
-        <PackageReference Include="Xeption" Version="2.8.0" />
-    </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Identity" Version="1.17.1" />
+		<PackageReference Condition="'$(TargetFramework)' != 'net10.0'" Include="Microsoft.Exchange.WebServices" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
+		<PackageReference Include="Microsoft.Graph" Version="5.101.0" />
+		<PackageReference Include="Xeption" Version="2.8.0" />
+	</ItemGroup>
 
-    <ItemGroup>
-        <InternalsVisibleTo Include="FlexiMail.Tests.Unit" />
-        <InternalsVisibleTo Include="FlexiMail.Tests.Manual" />
-        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
-    </ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="FlexiMail.Tests.Unit" />
+		<InternalsVisibleTo Include="FlexiMail.Tests.Manual" />
+		<InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+	</ItemGroup>
 
 </Project>
