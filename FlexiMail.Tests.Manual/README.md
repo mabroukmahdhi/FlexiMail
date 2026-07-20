@@ -28,6 +28,7 @@ is remembered automatically; an ID can also be pasted from an earlier run.
 
 Shared-mailbox creation also requires PowerShell 7, the
 `ExchangeOnlineManagement` module, the `Exchange.ManageAsApp` application
-permission with admin consent, and Exchange recipient-management RBAC assigned
-to the app service principal. The console requires typing `CREATE` before it
-performs this administrative operation.
+permission with admin consent, and the supported Microsoft Entra **Exchange
+Administrator** directory role assigned to the enterprise application for the
+initial test. The console requires typing `CREATE` before it performs this
+administrative operation.

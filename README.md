@@ -312,10 +312,13 @@ Prerequisites:
 
 3. Add the **Office 365 Exchange Online** application permission
    `Exchange.ManageAsApp` to the Entra app and grant administrator consent.
-4. Assign the app service principal the Exchange `Recipient Management` role,
-   or preferably a custom least-privileged role group containing only the
-   mailbox-creation cmdlets it needs. The broader `Exchange Administrator` role
-   also works but is not recommended for routine provisioning.
+4. For initial setup and manual testing, assign the enterprise application the
+   supported Microsoft Entra **Exchange Administrator** directory role under
+   **Identity > Roles & admins**. Do not confuse this with an Azure subscription
+   RBAC role or a Graph mail-access application role. `Exchange Administrator`
+   is broad; production deployments should replace it with a tested custom
+   Exchange Online role group containing only the required recipient-creation
+   commands and write scope.
 5. Upload the public certificate to the app registration. Install its private
    certificate in the certificate store of the user running FlexiMail. The
    configured thumbprint identifies that certificate.
@@ -427,6 +430,10 @@ subscription management are Graph-only; calling them on an Exchange-configured
 client throws `NotSupportedException`.
 
 ## Contributing
+
+For complete Exchange Online shared-mailbox provisioning setup—including app
+registration, permissions, PowerShell, certificate creation, and
+troubleshooting—see [GUIDE.md](GUIDE.md).
 
 1. Fork the repository
 2. Create a branch (`git checkout -b users/your-github-id/feature-name`)

@@ -38,9 +38,9 @@ namespace FlexiMail.Tests.Manual
 
         private static readonly ExchangeProvisioningConfigurations ProvisioningConfigurations = new()
         {
-            AppId = "YOUR_ENTRA_APP_ID",
-            Organization = "your-tenant.onmicrosoft.com",
-            CertificateThumbprint = "YOUR_CERTIFICATE_THUMBPRINT",
+            AppId = "",
+            Organization = "",
+            CertificateThumbprint = "",
             PowerShellExecutable = "pwsh"
         };
 
