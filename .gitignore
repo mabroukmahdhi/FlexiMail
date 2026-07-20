@@ -398,5 +398,3 @@ FodyWeavers.xsd
 *.sln.iml
 .DS_Store
 /.idea
-/FlexiMail.Tests.Manual/FlexiMail.Tests.Manual.csproj
-/FlexiMail.Tests.Manual

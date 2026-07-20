@@ -112,14 +112,27 @@ subscription = await client.RenewSubscriptionAsync(subscription.Id);
 await client.DeleteSubscriptionAsync(subscription.Id);
 ```
 
-Minimal API webhook example:
+#### Designing the notification endpoint
+
+`NotificationUrl` receives resource-change notifications. For the subscription
+created above, each notification means that a message was created in the
+mailbox Inbox. The endpoint should only validate and durably enqueue the event;
+email retrieval and business processing should run in a background worker.
+
+Both webhook URLs must implement Microsoft's validation handshake. Graph sends
+a `POST` with a `validationToken` query parameter, and the endpoint must return
+the URL-decoded token with `200 OK`, `text/plain`, and no JSON wrapper within 10
+seconds.
+
+Minimal API notification endpoint:
 
 ```csharp
-using FlexiMail.Models.Subscriptions;
+using FlexiMail.Models.Foundations.Subscriptions;
 using System.Text.Json;
 
 app.MapPost("/webhooks/fleximail", async (
     HttpRequest request,
+    IMailNotificationQueue notificationQueue,
     CancellationToken cancellationToken) =>
 {
     // Microsoft Graph validates the URL while the subscription is created.
@@ -139,25 +152,139 @@ app.MapPost("/webhooks/fleximail", async (
             continue;
         }
 
-        // Queue this work in production and return promptly.
-        var message = await client.GetReceivedMessageAsync(
-            notification.ResourceData.Id,
-            mailbox: "support@domain.com",
-            cancellationToken);
-
-        // Process message here.
+        // Persist to a durable queue. Do not retrieve or process the email here.
+        await notificationQueue.EnqueueAsync(notification, cancellationToken);
     }
 
     return Results.Accepted();
 });
 ```
 
-Graph validates a webhook by POSTing a `validationToken` query parameter. The
-endpoint must return its URL-decoded value as `text/plain` within 10 seconds.
-For normal notifications, validate `clientState`, enqueue processing, and return
-`202 Accepted` quickly. Subscriptions created by FlexiMail last six days and
-must be renewed. Lifecycle notifications and durable subscription storage are
-recommended for production.
+`IMailNotificationQueue` represents an application-owned durable queue, such as
+Azure Service Bus, RabbitMQ, Amazon SQS, or a database-backed job queue. A
+background worker dequeues the event and retrieves the message:
+
+```csharp
+if (notification.ChangeType == "created" &&
+    !string.IsNullOrWhiteSpace(notification.ResourceData?.Id))
+{
+    var message = await client.GetReceivedMessageAsync(
+        notification.ResourceData.Id,
+        mailbox: "support@domain.com",
+        cancellationToken);
+
+    // Process the email idempotently here.
+}
+```
+
+The notification endpoint should:
+
+1. Accept only HTTPS requests.
+2. Complete the validation-token handshake before attempting JSON parsing.
+3. Deserialize every item in the `value` array because Graph batches events.
+4. Compare `clientState` with the secret stored for that subscription and
+   discard mismatches.
+5. Durably enqueue valid events and return `202 Accepted` within three seconds.
+6. Return `5xx` if the event could not be persisted, allowing Graph to retry.
+7. Process events idempotently because duplicate or retried notifications are
+   possible. A useful deduplication key combines `SubscriptionId`, `ChangeType`,
+   and `ResourceData.Id`.
+
+Do not trust the mailbox, subscription, or message ID solely because it appears
+in the request. Match `SubscriptionId` to a stored subscription and use the
+stored mailbox when retrieving the message. Keep `clientState` secret and do
+not log it.
+
+#### Designing the lifecycle notification endpoint
+
+`LifecycleNotificationUrl` receives events about subscription health, not new
+emails. Its payload uses the same top-level `{ "value": [...] }` envelope and
+contains a `lifecycleEvent` value. A minimal application DTO is:
+
+```csharp
+using System.Text.Json.Serialization;
+
+public sealed class GraphLifecycleNotificationCollection
+{
+    [JsonPropertyName("value")]
+    public List<GraphLifecycleNotification> Value { get; set; } = [];
+}
+
+public sealed class GraphLifecycleNotification
+{
+    [JsonPropertyName("subscriptionId")]
+    public string SubscriptionId { get; set; }
+
+    [JsonPropertyName("subscriptionExpirationDateTime")]
+    public DateTimeOffset? SubscriptionExpirationDateTime { get; set; }
+
+    [JsonPropertyName("clientState")]
+    public string ClientState { get; set; }
+
+    [JsonPropertyName("lifecycleEvent")]
+    public string LifecycleEvent { get; set; }
+}
+```
+
+The lifecycle endpoint follows the same handshake, validation, batching, and
+queue-first rules:
+
+```csharp
+app.MapPost("/webhooks/fleximail/lifecycle", async (
+    HttpRequest request,
+    IMailLifecycleQueue lifecycleQueue,
+    CancellationToken cancellationToken) =>
+{
+    if (request.Query.TryGetValue("validationToken", out var token))
+    {
+        return Results.Text(token.ToString(), "text/plain");
+    }
+
+    var batch = await JsonSerializer.DeserializeAsync<GraphLifecycleNotificationCollection>(
+        request.Body,
+        cancellationToken: cancellationToken);
+
+    foreach (var notification in batch?.Value ?? [])
+    {
+        if (!string.Equals(notification.ClientState, clientState,
+            StringComparison.Ordinal))
+        {
+            continue;
+        }
+
+        await lifecycleQueue.EnqueueAsync(notification, cancellationToken);
+    }
+
+    return Results.Accepted();
+});
+```
+
+The lifecycle worker handles each event as follows:
+
+- `reauthorizationRequired`: call `RenewSubscriptionAsync(subscriptionId)`.
+  Renewal also reauthorizes the subscription. Do not concurrently send separate
+  renew and reauthorize requests for the same subscription.
+- `subscriptionRemoved`: create a replacement with
+  `SubscribeToInboxAsync(...)`, persist its new ID and expiration, and reconcile
+  the Inbox for changes that occurred during the gap.
+- `missed`: reconcile the Inbox against durable local state. Microsoft Graph
+  delta queries are the preferred large-scale recovery mechanism; FlexiMail
+  does not currently expose delta-query APIs, so consumers must either call
+  Graph directly or rescan a suitable recent Inbox window and deduplicate by
+  message ID.
+
+Subscriptions created by FlexiMail expire after six days. Store the subscription
+ID, mailbox, `clientState`, and expiration in durable storage, and run a scheduled
+renewal before expiration even when no lifecycle event was received. Lifecycle
+events complement scheduled renewal; they do not replace it.
+
+For both endpoints, Graph considers a notification delivered after a timely 2xx
+response. Returning quickly avoids endpoint throttling and dropped events;
+durable queues ensure work survives after `202 Accepted` is returned.
+
+See Microsoft's documentation for the complete
+[webhook delivery contract](https://learn.microsoft.com/en-us/graph/change-notifications-delivery-webhooks)
+and [lifecycle-event behavior](https://learn.microsoft.com/en-us/graph/change-notifications-lifecycle-events).
 
 The Entra application needs the Microsoft Graph application permission
 `Mail.Read` with administrator consent. Because this permission can read tenant
