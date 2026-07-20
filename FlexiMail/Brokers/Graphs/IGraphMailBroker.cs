@@ -4,9 +4,12 @@
 // ---------------------------------------
 
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using FlexiMail.Models.Foundations.Attachments;
 using FlexiMail.Models.Foundations.Bodies;
+using FlexiMail.Models.Foundations.Inbounds;
+using FlexiMail.Models.Foundations.Subscriptions;
 
 namespace FlexiMail.Brokers.Graphs
 {
@@ -38,5 +41,41 @@ namespace FlexiMail.Brokers.Graphs
             BodyContentType bodyContentType,
             IEnumerable<FlexiAttachment> attachments,
             bool saveToSentItems = true);
+
+        /// <summary>Retrieves a page of messages from the specified mailbox Inbox.</summary>
+        /// <param name="mailbox">The mailbox user ID or UPN.</param>
+        /// <param name="pageSize">The maximum number of messages to return.</param>
+        /// <param name="unreadOnly">Whether to return only unread messages.</param>
+        /// <param name="cancellationToken">The token used to cancel the operation.</param>
+        /// <returns>The requested page of messages.</returns>
+        ValueTask<FlexiReceivedMessagePage> GetInboxAsync(string mailbox, int pageSize, bool unreadOnly, CancellationToken cancellationToken);
+
+        /// <summary>Retrieves a message from the specified mailbox.</summary>
+        /// <param name="mailbox">The mailbox user ID or UPN.</param>
+        /// <param name="messageId">The Microsoft Graph message identifier.</param>
+        /// <param name="cancellationToken">The token used to cancel the operation.</param>
+        /// <returns>The received message.</returns>
+        ValueTask<FlexiReceivedMessage> GetMessageAsync(string mailbox, string messageId, CancellationToken cancellationToken);
+
+        /// <summary>Creates a new-message subscription for the specified mailbox Inbox.</summary>
+        /// <param name="mailbox">The mailbox user ID or UPN.</param>
+        /// <param name="notificationUrl">The HTTPS notification endpoint.</param>
+        /// <param name="lifecycleNotificationUrl">The optional HTTPS lifecycle endpoint.</param>
+        /// <param name="clientState">The secret notification validation value.</param>
+        /// <param name="cancellationToken">The token used to cancel the operation.</param>
+        /// <returns>The created subscription.</returns>
+        ValueTask<FlexiMailSubscription> CreateInboxSubscriptionAsync(string mailbox, string notificationUrl, string lifecycleNotificationUrl, string clientState, CancellationToken cancellationToken);
+
+        /// <summary>Renews an existing mail subscription.</summary>
+        /// <param name="subscriptionId">The subscription identifier.</param>
+        /// <param name="cancellationToken">The token used to cancel the operation.</param>
+        /// <returns>The renewed subscription.</returns>
+        ValueTask<FlexiMailSubscription> RenewSubscriptionAsync(string subscriptionId, CancellationToken cancellationToken);
+
+        /// <summary>Deletes an existing mail subscription.</summary>
+        /// <param name="subscriptionId">The subscription identifier.</param>
+        /// <param name="cancellationToken">The token used to cancel the operation.</param>
+        /// <returns>A task representing the asynchronous delete operation.</returns>
+        ValueTask DeleteSubscriptionAsync(string subscriptionId, CancellationToken cancellationToken);
     }
 }

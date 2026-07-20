@@ -5,6 +5,7 @@
 
 using System;
 using System.Threading.Tasks;
+using System.Threading;
 #if !NET10_0
 using FlexiMail.Brokers.Exchanges;
 #endif
@@ -15,6 +16,8 @@ using FlexiMail.Models.Foundations.Messages;
 using FlexiMail.Services;
 using FlexiMail.Services.Graphs;
 using Microsoft.Extensions.DependencyInjection;
+using FlexiMail.Models.Foundations.Subscriptions;
+using FlexiMail.Models.Foundations.Inbounds;
 
 namespace FlexiMail
 {
@@ -86,6 +89,47 @@ namespace FlexiMail
 
             await this.exchangeService.SendAndSaveCopyAsync(flexiMessage);
         }
+
+        /// <inheritdoc/>
+        public ValueTask<FlexiReceivedMessagePage> GetInboxAsync(
+            string mailbox = null,
+            int pageSize = 25,
+            bool unreadOnly = false,
+            CancellationToken cancellationToken = default) =>
+            GetGraphService().GetInboxAsync(mailbox, pageSize, unreadOnly, cancellationToken);
+
+        /// <inheritdoc/>
+        public ValueTask<FlexiReceivedMessage> GetReceivedMessageAsync(
+            string messageId,
+            string mailbox = null,
+            CancellationToken cancellationToken = default) =>
+            GetGraphService().GetReceivedMessageAsync(messageId, mailbox, cancellationToken);
+
+        /// <inheritdoc/>
+        public ValueTask<FlexiMailSubscription> SubscribeToInboxAsync(
+            string notificationUrl,
+            string clientState,
+            string mailbox = null,
+            string lifecycleNotificationUrl = null,
+            CancellationToken cancellationToken = default) =>
+            GetGraphService().SubscribeToInboxAsync(
+                notificationUrl, clientState, mailbox, lifecycleNotificationUrl, cancellationToken);
+
+        /// <inheritdoc/>
+        public ValueTask<FlexiMailSubscription> RenewSubscriptionAsync(
+            string subscriptionId,
+            CancellationToken cancellationToken = default) =>
+            GetGraphService().RenewSubscriptionAsync(subscriptionId, cancellationToken);
+
+        /// <inheritdoc/>
+        public ValueTask DeleteSubscriptionAsync(
+            string subscriptionId,
+            CancellationToken cancellationToken = default) =>
+            GetGraphService().DeleteSubscriptionAsync(subscriptionId, cancellationToken);
+
+        private IFlexiGraphService GetGraphService() =>
+            this.graphService ?? throw new NotSupportedException(
+                "Reading mail and managing inbox subscriptions require a Graph-configured FlexiMailClient.");
 
         private static IServiceProvider RegisterServices(
             ExchangeConfigurations exchangeConfigurations,
