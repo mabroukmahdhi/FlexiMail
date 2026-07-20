@@ -15,6 +15,7 @@
 - Exchange and Microsoft Graph mail sending with sent-items copy
 - Microsoft Graph inbox reading, including bodies and file attachments
 - Microsoft Graph webhook subscription management for new inbox messages
+- License-free Exchange Online shared-mailbox provisioning
 - `FlexiGraphService` for Graph-based delivery
 - Asynchronous APIs
 - Test-first design with unit and integration coverage
@@ -290,6 +291,71 @@ The Entra application needs the Microsoft Graph application permission
 `Mail.Read` with administrator consent. Because this permission can read tenant
 mailboxes, administrators should restrict the application's mailbox access in
 Exchange Online where appropriate. `Mail.Send` remains required for sending.
+
+### Create a shared mailbox
+
+FlexiMail can provision an Exchange Online shared mailbox by running the
+Microsoft-supported `New-Mailbox -Shared` cmdlet with app-only certificate
+authentication. This is a separate administrative client because mailbox
+provisioning requires substantially broader permissions than sending or reading
+mail.
+
+Prerequisites:
+
+1. Install [PowerShell 7](https://learn.microsoft.com/powershell/scripting/install/installing-powershell)
+   on the machine running the application.
+2. Install the Exchange Online module for the same user that runs the process:
+
+   ```powershell
+   Install-Module ExchangeOnlineManagement -Scope CurrentUser
+   ```
+
+3. Add the **Office 365 Exchange Online** application permission
+   `Exchange.ManageAsApp` to the Entra app and grant administrator consent.
+4. Assign the app service principal the Exchange `Recipient Management` role,
+   or preferably a custom least-privileged role group containing only the
+   mailbox-creation cmdlets it needs. The broader `Exchange Administrator` role
+   also works but is not recommended for routine provisioning.
+5. Upload the public certificate to the app registration. Install its private
+   certificate in the certificate store of the user running FlexiMail. The
+   configured thumbprint identifies that certificate.
+
+```csharp
+using FlexiMail;
+using FlexiMail.Models.Configurations;
+using FlexiMail.Models.Foundations.Mailboxes;
+
+var provisioningClient = new FlexiMailboxProvisioningClient(
+    new ExchangeProvisioningConfigurations
+    {
+        AppId = "00000000-0000-0000-0000-000000000000",
+        Organization = "contoso.onmicrosoft.com",
+        CertificateThumbprint = "0123456789ABCDEF0123456789ABCDEF01234567",
+        PowerShellExecutable = "pwsh"
+    });
+
+var mailbox = await provisioningClient.CreateSharedMailboxAsync(
+    new FlexiSharedMailboxRequest
+    {
+        DisplayName = "Customer Support",
+        Alias = "support",
+        PrimarySmtpAddress = "support@contoso.com"
+    });
+
+Console.WriteLine($"Created {mailbox.PrimarySmtpAddress}");
+```
+
+The operation starts a non-interactive PowerShell process, imports
+`ExchangeOnlineManagement`, connects with the configured app and certificate,
+creates the mailbox, returns a typed result, and disconnects. No client secret
+or certificate private key is placed in the generated command.
+
+A shared mailbox can use up to 50 GB without its own license. The tenant must
+still have an Exchange Online subscription, and licensing is required for more
+than 50 GB, archiving, litigation hold, and certain compliance features. A
+normal user mailbox cannot be provisioned without an Exchange Online license.
+See Microsoft's [shared-mailbox licensing guidance](https://learn.microsoft.com/en-us/microsoft-365/admin/email/about-shared-mailboxes)
+and [app-only Exchange authentication setup](https://learn.microsoft.com/en-us/powershell/exchange/app-only-auth-powershell-v2).
 
 ### Send via Microsoft Graph
 ```csharp

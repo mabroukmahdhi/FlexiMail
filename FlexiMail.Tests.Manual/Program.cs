@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FlexiMail.Models.Configurations;
 using FlexiMail.Models.Foundations.Inbounds;
+using FlexiMail.Models.Foundations.Mailboxes;
 using FlexiMail.Models.Foundations.Subscriptions;
 
 namespace FlexiMail.Tests.Manual
@@ -34,6 +35,14 @@ namespace FlexiMail.Tests.Manual
 
         private static readonly IFlexiMailClient Client =
             new FlexiMailClient(Configurations);
+
+        private static readonly ExchangeProvisioningConfigurations ProvisioningConfigurations = new()
+        {
+            AppId = "YOUR_ENTRA_APP_ID",
+            Organization = "your-tenant.onmicrosoft.com",
+            CertificateThumbprint = "YOUR_CERTIFICATE_THUMBPRINT",
+            PowerShellExecutable = "pwsh"
+        };
 
         private static FlexiMailSubscription currentSubscription;
 
@@ -72,6 +81,7 @@ namespace FlexiMail.Tests.Manual
             Console.WriteLine("4 - Create a new-message subscription");
             Console.WriteLine("5 - Renew a subscription");
             Console.WriteLine("6 - Delete a subscription");
+            Console.WriteLine("7 - Create an Exchange Online shared mailbox");
             Console.WriteLine("0 - Exit");
             Console.Write("Select a scenario: ");
         }
@@ -84,6 +94,7 @@ namespace FlexiMail.Tests.Manual
             "4" => CreateSubscriptionAsync(),
             "5" => RenewSubscriptionAsync(),
             "6" => DeleteSubscriptionAsync(),
+            "7" => CreateSharedMailboxAsync(),
             _ => Task.Run(() => Console.WriteLine("Unknown selection."))
         };
 
@@ -213,6 +224,42 @@ namespace FlexiMail.Tests.Manual
             }
 
             return subscriptionId;
+        }
+
+        private static async Task CreateSharedMailboxAsync()
+        {
+            Console.Write("Display name: ");
+            var displayName = Console.ReadLine()?.Trim();
+            Console.Write("Alias (for example, support): ");
+            var alias = Console.ReadLine()?.Trim();
+            Console.Write("Primary SMTP address: ");
+            var primarySmtpAddress = Console.ReadLine()?.Trim();
+
+            Console.Write(
+                $"Type CREATE to provision shared mailbox '{primarySmtpAddress}': ");
+
+            if (!string.Equals(Console.ReadLine()?.Trim(), "CREATE", StringComparison.Ordinal))
+            {
+                Console.WriteLine("Creation cancelled.");
+                return;
+            }
+
+            IFlexiMailboxProvisioningClient provisioningClient =
+                new FlexiMailboxProvisioningClient(ProvisioningConfigurations);
+
+            var mailbox = await provisioningClient.CreateSharedMailboxAsync(
+                new FlexiSharedMailboxRequest
+                {
+                    DisplayName = displayName,
+                    Alias = alias,
+                    PrimarySmtpAddress = primarySmtpAddress
+                });
+
+            Console.WriteLine("Created shared mailbox:");
+            Console.WriteLine($"  Identity: {mailbox.Identity}");
+            Console.WriteLine($"  Object ID: {mailbox.ExternalDirectoryObjectId}");
+            Console.WriteLine($"  Address: {mailbox.PrimarySmtpAddress}");
+            Console.WriteLine($"  Type: {mailbox.RecipientTypeDetails}");
         }
 
         private static void PrintSubscription(
