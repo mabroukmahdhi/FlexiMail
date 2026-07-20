@@ -9,20 +9,20 @@
 		<Authors>Mabrouk Mahdhi</Authors>
 		<Company>Mabrouk Mahdhi</Company>
 		<Product>FlexiMail</Product>
-		<Description>FlexiMail is a robust, test-driven C# library tailored specifically for seamless email integration using Microsoft Exchange Web Services (EWS).</Description>
+		<Description>FlexiMail is a test-driven .NET email client for sending mail through Microsoft Graph or Exchange, reading Microsoft Graph inboxes, and managing new-message webhook subscriptions.</Description>
 		<Copyright>Mabrouk Mahdhi (c) 2024</Copyright>
 		<PackageProjectUrl>https://github.com/mabroukmahdhi/FlexiMail</PackageProjectUrl>
 		<PackageIcon>icmail.png</PackageIcon>
 		<RepositoryUrl>https://github.com/mabroukmahdhi/FlexiMail</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Microsoft Graph; Mail.Send; EWS; .NET; Mailing; Message; Exchange; Exchange WebServices</PackageTags>
-		<PackageReleaseNotes>Ignore EWS for .NET 10</PackageReleaseNotes>
-		<AssemblyVersion>0.1.6</AssemblyVersion>
-		<FileVersion>0.1.6</FileVersion>
+		<PackageTags>Microsoft Graph; Mail.Send; Mail.Read; Webhooks; Change Notifications; EWS; .NET; Mailing; Message; Exchange; Exchange WebServices</PackageTags>
+		<PackageReleaseNotes>Added Microsoft Graph inbox reading and individual message retrieval with file attachments. Added new-message webhook subscription creation, renewal, deletion, notification contracts, and client-state validation. Added .NET 8, .NET 9, and .NET 10 documentation and examples for inbound mail.</PackageReleaseNotes>
+		<AssemblyVersion>0.2.0</AssemblyVersion>
+		<FileVersion>0.2.0</FileVersion>
 		<PackageLicenseFile>license.txt</PackageLicenseFile>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.1.6</Version>
+		<Version>0.2.0</Version>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
