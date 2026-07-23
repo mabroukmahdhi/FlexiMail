@@ -9,26 +9,30 @@
 		<Authors>Mabrouk Mahdhi</Authors>
 		<Company>Mabrouk Mahdhi</Company>
 		<Product>FlexiMail</Product>
-		<Description>FlexiMail is a test-driven .NET email client for sending mail through Microsoft Graph or Exchange, reading Microsoft Graph inboxes, and managing new-message webhook subscriptions.</Description>
+		<Description>FlexiMail is a test-driven .NET email client for sending and reading mail, managing Microsoft Graph webhooks, and provisioning Exchange Online shared mailboxes.</Description>
 		<Copyright>Mabrouk Mahdhi (c) 2024</Copyright>
 		<PackageProjectUrl>https://github.com/mabroukmahdhi/FlexiMail</PackageProjectUrl>
 		<PackageIcon>icmail.png</PackageIcon>
 		<RepositoryUrl>https://github.com/mabroukmahdhi/FlexiMail</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>Microsoft Graph; Mail.Send; Mail.Read; Webhooks; Change Notifications; EWS; .NET; Mailing; Message; Exchange; Exchange WebServices</PackageTags>
-		<PackageReleaseNotes>Added Microsoft Graph inbox reading and individual message retrieval with file attachments. Added new-message webhook subscription creation, renewal, deletion, notification contracts, and client-state validation. Added .NET 8, .NET 9, and .NET 10 documentation and examples for inbound mail.</PackageReleaseNotes>
-		<AssemblyVersion>0.2.0</AssemblyVersion>
-		<FileVersion>0.2.0</FileVersion>
+		<PackageTags>Microsoft Graph; Mail.Send; Mail.Read; Webhooks; Change Notifications; Shared Mailbox; Provisioning; Exchange Online; PowerShell; EWS; .NET; Mailing</PackageTags>
+		<PackageReleaseNotes>Added Exchange Online shared-mailbox provisioning through app-only certificate authentication and PowerShell 7. Added typed provisioning configuration, request, and result contracts; validation and cancellation support; a guarded manual test scenario; and a complete setup and troubleshooting guide.</PackageReleaseNotes>
+		<AssemblyVersion>0.3.0</AssemblyVersion>
+		<FileVersion>0.3.0</FileVersion>
 		<PackageLicenseFile>license.txt</PackageLicenseFile>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>0.2.0</Version>
+		<Version>0.3.0</Version>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\GUIDE.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
